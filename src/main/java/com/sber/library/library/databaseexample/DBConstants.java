@@ -1,4 +1,4 @@
-package com.sber.library.library.database;
+package com.sber.library.library.databaseexample;
 
 public interface DBConstants {
     String DB_HOST = "ec2-34-246-227-219.eu-west-1.compute.amazonaws.com";

@@ -1,4 +1,4 @@
-package com.sber.library.library.database.model;
+package com.sber.library.library.databaseexample.model;
 
 import lombok.*;
 

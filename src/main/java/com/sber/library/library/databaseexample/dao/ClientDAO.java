@@ -1,6 +1,6 @@
-package com.sber.library.library.database.dao;
+package com.sber.library.library.databaseexample.dao;
 
-import com.sber.library.library.database.model.Client;
+import com.sber.library.library.databaseexample.model.Client;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

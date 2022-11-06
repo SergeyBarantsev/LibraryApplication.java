@@ -1,6 +1,6 @@
-package com.sber.library.library.database.dao;
+package com.sber.library.library.databaseexample.dao;
 
-import com.sber.library.library.database.model.Book;
+import com.sber.library.library.databaseexample.model.Book;
 
 import java.sql.*;
 import java.util.List;

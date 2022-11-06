@@ -1,16 +1,19 @@
 package com.sber.library.library;
 
-import com.sber.library.library.database.config.DBConfig;
-import com.sber.library.library.database.dao.BookDAO;
-import com.sber.library.library.database.dao.ClientDAO;
+//import com.sber.library.library.databaseexample.config.DBConfig;
+//import com.sber.library.library.databaseexample.dao.BookDAO;
+//import com.sber.library.library.databaseexample.dao.ClientDAO;
+//import org.springframework.context.ApplicationContext;
+//import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+//import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+//import com.sber.library.library.database.model.Book;
+//import org.springframework.beans.factory.annotation.Autowired;
+
+import com.sber.library.library.project.repository.BookRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-////import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-//import com.sber.library.library.database.model.Book;
-//import org.springframework.beans.factory.annotation.Autowired;
+
 
 import java.sql.SQLException;
 
@@ -26,13 +29,13 @@ public class LibraryApplication implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws SQLException {
-        ApplicationContext ctx = new AnnotationConfigApplicationContext(DBConfig.class);
-
-        ClientDAO clientDAO = ctx.getBean(ClientDAO.class);
-        BookDAO bookDAO = ctx.getBean(BookDAO.class);
-
-        bookDAO.findByTitle(clientDAO.booksOfClient("fsgggrs@mail.ru"));
+    public void run(String... args) throws SQLException  {
+//        ApplicationContext ctx = new AnnotationConfigApplicationContext(DBConfig.class);
+//
+//        ClientDAO clientDAO = ctx.getBean(ClientDAO.class);
+//        BookDAO bookDAO = ctx.getBean(BookDAO.class);
+//
+//        bookDAO.findByTitle(clientDAO.booksOfClient("fsgggrs@mail.ru"));
 
         //Добавление новых пользователей в БД
 //        clientDAO.insertClientInDB(4,"Petrov","Alex", "1997-05-21","+798634546", "example1@bk.ru");
@@ -48,5 +51,6 @@ public class LibraryApplication implements CommandLineRunner {
 //                        rs.getInt(5)
 //                ));
 //        list.forEach(System.out::println);
+
     }
 }
