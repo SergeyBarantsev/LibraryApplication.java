@@ -50,9 +50,4 @@ public class User extends GenericModel {
             fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_USER_ROLE"))
     private Role role;
-
-    @OneToMany(mappedBy = "user",
-            cascade = {CascadeType.ALL},
-            fetch = FetchType.LAZY)
-    private Set<Publishing> publishingSet = new HashSet<>();
 }

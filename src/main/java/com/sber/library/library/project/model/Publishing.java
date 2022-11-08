@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "publishings")
@@ -34,7 +36,7 @@ public class Publishing extends GenericModel {
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_PUBLISHING_USER"))
     private User user;
 
-    @OneToOne(cascade = {CascadeType.PERSIST,
+    @ManyToOne(cascade = {CascadeType.PERSIST,
             CascadeType.DETACH,
             CascadeType.MERGE,
             CascadeType.REFRESH},

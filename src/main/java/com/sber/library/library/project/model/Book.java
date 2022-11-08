@@ -45,8 +45,4 @@ public class Book extends GenericModel {
             inverseJoinColumns = @JoinColumn(name = "author_id"),
             inverseForeignKey = @ForeignKey(name = "FK_AUTHORS_BOOKS"))
     private Set<Author> authors = new HashSet<>();
-
-    @OneToOne(mappedBy = "book",
-            cascade = {CascadeType.ALL})
-    private Publishing publishing;
 }

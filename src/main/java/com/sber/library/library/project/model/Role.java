@@ -27,12 +27,4 @@ public class Role {
 
     @Column(name = "role_description")
     private String roleDescription;
-
-    @OneToMany(mappedBy = "role",
-            cascade = {CascadeType.PERSIST,
-                    CascadeType.DETACH,
-                    CascadeType.MERGE,
-                    CascadeType.REFRESH},
-            fetch = FetchType.LAZY)
-    private Set<User> users = new HashSet<>();
 }
