@@ -32,6 +32,6 @@ public class Author extends GenericModel {
             CascadeType.DETACH,
             CascadeType.MERGE,
             CascadeType.REFRESH},
-            fetch = FetchType.EAGER)
+            fetch = FetchType.LAZY)
     private Set<Book> books = new HashSet<>();
 }

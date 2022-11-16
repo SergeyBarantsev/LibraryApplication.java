@@ -45,7 +45,7 @@ public class User extends GenericModel {
             CascadeType.DETACH,
             CascadeType.MERGE,
             CascadeType.REFRESH},
-            fetch = FetchType.EAGER)
+            fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_USER_ROLE"))
     private Role role;
 }
