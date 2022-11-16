@@ -1,5 +1,6 @@
 package com.sber.library.library.project.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,11 +27,11 @@ public class Author extends GenericModel {
 
     @Column(name = "author_description")
     private String authorDescription;
-
+    @JsonIgnore
     @ManyToMany(mappedBy = "authors", cascade = {CascadeType.PERSIST,
             CascadeType.DETACH,
             CascadeType.MERGE,
             CascadeType.REFRESH},
-            fetch = FetchType.LAZY)
+            fetch = FetchType.EAGER)
     private Set<Book> books = new HashSet<>();
 }
