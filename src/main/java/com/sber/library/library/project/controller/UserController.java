@@ -1,16 +1,14 @@
 package com.sber.library.library.project.controller;
 
-import com.sber.library.library.project.model.Role;
+import com.sber.library.library.project.dto.UserDTO;
 import com.sber.library.library.project.model.User;
-import com.sber.library.library.project.repository.RoleRepository;
-import com.sber.library.library.project.repository.UserRepository;
+import com.sber.library.library.project.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.webjars.NotFoundException;
 
 import java.util.List;
 
@@ -21,68 +19,49 @@ import java.util.List;
 @Tag(name = "Пользователи", description = "Контроллер для работы с пользователями нашей библиотеки.")
 public class UserController {
 
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository, RoleRepository roleRepository) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
 
     @Operation(description = "Получить информацию об одном пользователе по его id", method = "getOne")
     @RequestMapping(value = "/getUser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> getOne(@RequestParam(value = "userId") Long userId) {
-        return ResponseEntity.status(HttpStatus.OK).body(userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Such user with id= " + userId + "was not found")));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getOne(userId));
     }
 
     @Operation(description = "Получить информации обо всех пользователях", method = "listAllUsers")
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<User>> listAllUsers() {
-        return ResponseEntity.status(HttpStatus.OK).body(userRepository.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(userService.listAll());
     }
 
     @Operation(description = "Добавить пользователя в библиотеку", method = "add")
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> add(@RequestBody User newUser) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(newUser));
+    public ResponseEntity<User> add(@RequestBody UserDTO newUser) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createFromDTO(newUser));
     }
 
     @Operation(description = "Изменить информацию о пользователе по id", method = "updateUser")
     @RequestMapping(value = "/update", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> updateUser(@RequestBody User user,
+    public ResponseEntity<User> updateUser(@RequestBody UserDTO user,
                                            @RequestParam(value = "userId") Long userId) {
-        User oldUser = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Such user with id= " + userId + "was not found"));
-        oldUser.setUserAddress(user.getUserAddress());
-        oldUser.setUserBackUpEmail(user.getUserBackUpEmail());
-        oldUser.setUserDateBirth(user.getUserDateBirth());
-        oldUser.setUserFirstName(user.getUserFirstName());
-        oldUser.setUserLastName(user.getUserLastName());
-        oldUser.setUserLogin(user.getUserLogin());
-        oldUser.setUserMiddleName(user.getUserMiddleName());
-        oldUser.setUserPassword(user.getUserPassword());
-        oldUser.setUserPhone(user.getUserPhone());
-        return ResponseEntity.status(HttpStatus.OK).body(userRepository.save(oldUser));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.updateFromDTO(user, userId));
     }
 
     @Operation(description = "Удалить пользователя по id", method = "delete")
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> delete(@RequestParam(value = "userId") Long userId) {
-        userRepository.delete(userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Such user with id= " + userId + "was not found")));
+        userService.delete(userId);
         return ResponseEntity.status(HttpStatus.OK).body("Пользователь успешно удален");
     }
 
-
     @Operation(description = "Добавить роль пользователю", method = "addRoleToUser")
     @RequestMapping(value = "/addRoleToUser", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> addRoleToUser(@RequestParam(value = "roleId") Long roleId,
-                                              @RequestParam(value = "userId") Long userId) {
-        User user = userRepository.getReferenceById(userId);
-        Role role = roleRepository.getReferenceById(roleId);
-        user.setRole(role);
-        return ResponseEntity.status(HttpStatus.OK).body(userRepository.save(user));
+    public ResponseEntity<UserDTO> addRoleToUser(@RequestParam(value = "roleId") Long roleId,
+                                                 @RequestParam(value = "userId") Long userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.addRoleToUser(userId, roleId));
     }
 }

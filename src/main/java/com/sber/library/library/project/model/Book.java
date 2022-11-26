@@ -30,7 +30,7 @@ public class Book extends GenericModel {
     private String storagePlace;
 
     @Column(name = "book_amount")
-    private String amount;
+    private Integer amount;
 
     @Column(name = "book_publish_year")
     private String publishYear;

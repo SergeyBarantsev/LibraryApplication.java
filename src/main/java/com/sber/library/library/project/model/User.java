@@ -48,4 +48,5 @@ public class User extends GenericModel {
             fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_USER_ROLE"))
     private Role role;
+
 }
