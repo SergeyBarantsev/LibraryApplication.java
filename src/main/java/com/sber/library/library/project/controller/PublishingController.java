@@ -3,6 +3,7 @@ package com.sber.library.library.project.controller;
 import com.sber.library.library.project.dto.*;
 import com.sber.library.library.project.model.Publishing;
 import com.sber.library.library.project.services.GenericService;
+import com.sber.library.library.project.services.PublishingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -21,7 +23,7 @@ public class PublishingController {
 
     private final GenericService<Publishing, PublishingDTO> publishingService;
 
-    public PublishingController(GenericService<Publishing, PublishingDTO> publishingService){
+    public PublishingController(GenericService<Publishing, PublishingDTO> publishingService) {
         this.publishingService = publishingService;
     }
 
@@ -56,5 +58,11 @@ public class PublishingController {
     public ResponseEntity<String> delete(@RequestParam(value = "publishingId") Long publishingId) {
         publishingService.delete(publishingId);
         return ResponseEntity.status(HttpStatus.OK).body("Запись о выданной книге успешно удалена");
+    }
+
+    @Operation(description = "Вывод всех несданных вовремя книг пользователя")
+    @RequestMapping(value = "/{userId}/getOverdueBooksOfUser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<UserBooksDTO>> listOfOverdueBooksOfUser(@PathVariable(value = "userId") Long userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(((PublishingService) publishingService).listOfOverdueBooks(userId));
     }
 }

@@ -21,8 +21,6 @@ import java.util.List;
 @CrossOrigin(value = "*", allowedHeaders = "*")
 @Tag(name = "Книги", description = "Контроллер для работы с книгами нашей библиотеки.")
 public class BookController {
-    //    private final BookRepository bookRepository;
-//    private final AuthorRepository authorRepository;
     private final GenericService<Book, BookAuthorDTO> bookService;
     private final GenericService<Author, AuthorDTO> authorService;
 
@@ -69,14 +67,16 @@ public class BookController {
     @RequestMapping(value = "/addAuthorToBook", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Book> addAuthorToBook(@RequestParam(value = "bookId") Long bookId,
                                                 @RequestParam(value = "authorId") Long authorId) {
-//        Author author = authorRepository.getReferenceById(authorId);
-//        Book book = bookRepository.getReferenceById(bookId);
-
         Author author = authorService.getOne(authorId);
         Book book = bookService.getOne(bookId);
         book.getAuthors().add(author);
         return ResponseEntity.status(HttpStatus.CREATED).body(bookService.update(book));
     }
+//    @Operation(description = "Найти книгу по фильтру", method = "findBookByFilter")
+//    @RequestMapping(value = "/findBookByFilter", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<List<BookAuthorDTO>> findBookByFilter(@RequestBody SearchDTO searchDTO){
+//        return ResponseEntity.status(HttpStatus.OK).body(((BookService)bookService).searchBooks(searchDTO));
+//    }
 }
 
 

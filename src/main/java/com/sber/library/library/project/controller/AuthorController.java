@@ -22,13 +22,6 @@ import java.util.List;
 @CrossOrigin(value = "*", allowedHeaders = "*")
 @Tag(name = "Авторы", description = "Контроллер для работы с авторами нашей библиотеки.")
 public class AuthorController {
-//    private final AuthorRepository authorRepository;
-//    private final BookRepository bookRepository;
-//    public AuthorController(AuthorRepository authorRepository, BookRepository bookRepository) {
-//        this.authorRepository = authorRepository;
-//        this.bookRepository = bookRepository;
-//    }
-
     private final GenericService<Author, AuthorDTO> authorService;
     private final GenericService<Book, BookAuthorDTO> bookService;
 
@@ -81,7 +74,6 @@ public class AuthorController {
         return ResponseEntity.status(HttpStatus.CREATED).body(authorService.update(author));
     }
 
-    //<server>:port/api/authors/1/getBooks
     @Operation(description = "Получить информацию обо всех книгах автора")
     @RequestMapping(value = "/{authorId}/getBooks", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<BookDTO>> getAuthorBooks(@PathVariable(value = "authorId") Long authorId) {

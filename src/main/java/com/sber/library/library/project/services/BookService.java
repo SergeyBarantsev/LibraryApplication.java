@@ -1,6 +1,6 @@
 package com.sber.library.library.project.services;
 
-import com.sber.library.library.project.dto.BookAuthorDTO;
+import com.sber.library.library.project.dto.*;
 import com.sber.library.library.project.model.Author;
 import com.sber.library.library.project.model.Book;
 import com.sber.library.library.project.repository.AuthorRepository;
@@ -8,9 +8,11 @@ import com.sber.library.library.project.repository.BookRepository;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 
 @Service
 public class BookService extends GenericService<Book, BookAuthorDTO> {
@@ -38,7 +40,7 @@ public class BookService extends GenericService<Book, BookAuthorDTO> {
         book.setOnlineCopy(object.getOnlineCopy());
         book.setPublishYear(object.getPublishYear());
         book.setStoragePlace(object.getStoragePlace());
-        Set<Author> authors = new HashSet<>(authorRepository.findAllById(object.getAuthorsId()));
+        Set<Author> authors = new HashSet<>(authorRepository.findAllById(object.getAuthorIds()));
         book.getAuthors().addAll(authors);
         return bookRepository.save(book);
     }
@@ -54,7 +56,7 @@ public class BookService extends GenericService<Book, BookAuthorDTO> {
         book.setStoragePlace(newDtoObject.getStoragePlace());
         book.setCreatedBy(newDtoObject.getCreatedBy());
         book.setCreatedWhen(newDtoObject.getCreatedWhen());
-        Set<Author> authors = new HashSet<>(authorRepository.findAllById(newDtoObject.getAuthorsId()));
+        Set<Author> authors = new HashSet<>(authorRepository.findAllById(newDtoObject.getAuthorIds()));
         book.setAuthors(authors);
         return bookRepository.save(book);
     }

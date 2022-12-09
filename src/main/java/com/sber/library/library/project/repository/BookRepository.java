@@ -3,6 +3,8 @@ package com.sber.library.library.project.repository;
 import com.sber.library.library.project.model.Author;
 import com.sber.library.library.project.model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
