@@ -23,10 +23,10 @@ public class Author extends GenericModel {
     private String authorFIO;
 
     @Column(name = "author_life_period")
-    private String authorLifePeriod;
+    private String lifePeriod;
 
     @Column(name = "author_description")
-    private String authorDescription;
+    private String description;
     @JsonIgnore
     @ManyToMany(mappedBy = "authors", cascade = {CascadeType.PERSIST,
             CascadeType.DETACH,

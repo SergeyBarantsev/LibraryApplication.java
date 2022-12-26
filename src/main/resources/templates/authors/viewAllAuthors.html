@@ -1,0 +1,50 @@
+<!--страница с авторами-->
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultra.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Авторы</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1>Авторы библиотеки</h1>
+    <a
+            th:href="'authors/add'"
+            class="btn btn-secondary"
+            role="button"
+            style="float: right"
+            aria-disabled="true">Добавить автора
+    </a>
+    <div>
+
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ФИО</th>
+            <th scope="col">Годы жизни</th>
+            <th scope="col">Краткое описание</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--Перебор авторов-->
+        <tr th:each="author: ${authors}">
+            <td th:text="${author.authorFIO}"></td>
+            <td th:text="${author.lifePeriod}"></td>
+            <td th:text="${author.description}"></td>
+            <td>
+                <a th:href="'/authors/authorInfo/'+${author.id}"
+                   class="btn btn-primary"
+                   role="button"
+                   aria-disabled="true">Посмотреть книги
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

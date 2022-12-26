@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -17,10 +18,10 @@ public class AuthorDTO extends CommonDTO {
     private String lifePeriod;
     private String description;
 
-    public AuthorDTO(final Author author){
+    public AuthorDTO(final Author author) {
         this.id = author.getId();
         this.authorFIO = author.getAuthorFIO();
-        this.description = author.getAuthorDescription();
-        this.lifePeriod = author.getAuthorLifePeriod();
+        this.description = author.getDescription();
+        this.lifePeriod = author.getLifePeriod();
     }
 }

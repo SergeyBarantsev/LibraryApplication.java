@@ -3,7 +3,7 @@ package com.sber.library.library.project.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
@@ -12,7 +12,8 @@ import java.sql.Date;
 @Setter
 @ToString
 @SequenceGenerator(name = "default_gen", sequenceName = "users_seq", allocationSize = 1)
-public class User extends GenericModel {
+public class User
+        extends GenericModel {
 
     @Column(name = "user_address")
     private String userAddress;
@@ -21,7 +22,7 @@ public class User extends GenericModel {
     private String userBackUpEmail;
 
     @Column(name = "user_date_birth")
-    private Date userDateBirth;
+    private LocalDate userDateBirth;
 
     @Column(name = "user_first_name")
     private String userFirstName;
@@ -48,5 +49,4 @@ public class User extends GenericModel {
             fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_USER_ROLE"))
     private Role role;
-
 }

@@ -1,15 +1,20 @@
 package com.sber.library.library.project.controller;
 
+import com.sber.library.library.project.dto.LoginDTO;
 import com.sber.library.library.project.dto.UserDTO;
+import com.sber.library.library.project.jwtsecurity.JwtTokenUtil;
 import com.sber.library.library.project.model.User;
 import com.sber.library.library.project.services.UserService;
+import com.sber.library.library.project.services.userDetails.CustomUserDetailsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -20,11 +25,14 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final CustomUserDetailsService authenticationService;
+    private final JwtTokenUtil jwtTokenUtil;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, CustomUserDetailsService authenticationService, JwtTokenUtil jwtTokenUtil) {
         this.userService = userService;
+        this.authenticationService = authenticationService;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
-
 
     @Operation(description = "Получить информацию об одном пользователе по его id", method = "getOne")
     @RequestMapping(value = "/getUser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -64,4 +72,15 @@ public class UserController {
                                                  @RequestParam(value = "userId") Long userId) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.addRoleToUser(userId, roleId));
     }
+
+    @RequestMapping(value = "/auth", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> auth(@RequestBody LoginDTO loginDTO) {
+        HashMap<String, Object> response = new HashMap<>();
+        UserDetails foundUser = authenticationService.loadUserByUsername(loginDTO.getUsername());
+        String token = jwtTokenUtil.generateToken(foundUser);
+        response.put("token", token);
+        return ResponseEntity.ok().body(response);
+    }
 }
+

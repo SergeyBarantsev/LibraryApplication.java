@@ -1,4 +1,4 @@
-create table Clients
+create table users
 (
     client_id         serial primary key,
     client_surname    varchar(20) not null,
@@ -9,9 +9,6 @@ create table Clients
     unique (client_phone, client_email)
 );
 
-insert into clients(client_surname, client_name, client_dayOfBirth, client_phone, client_email)
-VALUES ('Petrov', 'Viktor', '1995-04-26', '+7845686465', 'fsgggrs@mail.ru');
-
 create table books
 (
     book_id          serial primary key,
@@ -21,12 +18,4 @@ create table books
     client_reader_id integer references clients (client_id)
 );
 
-INSERT INTO books(book_title, book_author, book_date_added, client_reader_id)
-VALUES ('Недоросль', 'Д. И. Фонвизин', now(), 1);
-INSERT INTO books(book_title, book_author, book_date_added, client_reader_id)
-VALUES ('Путешествие из Петербурга в Москву', 'А. Н. Радищев', now() - interval '24h', 1);
-INSERT INTO books(book_title, book_author, book_date_added, client_reader_id)
-VALUES ('Доктор Живаго', 'Б. Л. Пастернак', now() - interval '24h', null);
-INSERT INTO books(book_title, book_author, book_date_added, client_reader_id)
-VALUES ('Сестра моя - жизнь', 'Б. Л. Пастернак', now(), null);
 

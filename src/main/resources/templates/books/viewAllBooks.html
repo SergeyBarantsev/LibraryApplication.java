@@ -1,0 +1,62 @@
+<!--страница с книгами-->
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultra.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Книги</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1>Книги библиотеки</h1>
+    <a
+            th:href="'books/add'"
+            class="btn btn-secondary"
+            role="button"
+            style="float: right"
+            aria-disabled="true">Добавить книгу
+    </a>
+    <div>
+
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Название</th>
+            <th scope="col">Жанр</th>
+            <th scope="col">Онлайн копия</th>
+            <th scope="col">Место хранения</th>
+            <th scope="col">Количество</th>
+            <th scope="col">Год публикации</th>
+            <th scope="col">Автор(ы)</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--Перебор книг-->
+        <tr th:each="book: ${books}">
+            <td th:text="${book.title}"></td>
+            <td th:text="${book.genre.getGenreText}"></td>
+            <td th:text="${book.onlineCopy}"></td>
+            <td th:text="${book.storagePlace}"></td>
+            <td th:text="${book.amount}"></td>
+            <td th:text="${book.publishYear}"></td>
+            <td>
+                <ul>
+                    <li th:each="author: ${book.authorDTOs}" th:text="${author.authorFIO}"></li>
+                </ul>
+            </td>
+            <td>
+                <a th:href="'/books/delete/'+${book.id}"
+                   class="btn btn-primary"
+                   role="button"
+                   aria-disabled="true">Удалить
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

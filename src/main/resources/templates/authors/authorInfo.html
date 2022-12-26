@@ -1,0 +1,31 @@
+<!--страница с автора-->
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultra.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация об авторе</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h2>
+        <td th:text="${author.authorFIO}"></td>
+    </h2>
+    <h6>Годы жизни:</h6>
+    <td th:text="${author.lifePeriod}"></td>
+    <br>
+    <br>
+    <h6>Краткая описание</h6>
+    <td th:text="${author.description}"></td>
+    <br>
+    <br>
+    <h5>Книги</h5>
+    <td>
+        <ul>
+            <li th:each="book: ${books}" th:text="${book.title}"></li>
+        </ul>
+    </td>
+</div>
+</body>
+</html>

@@ -8,6 +8,7 @@ import com.sber.library.library.project.model.Book;
 import com.sber.library.library.project.services.AuthorService;
 import com.sber.library.library.project.services.GenericService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,6 +22,7 @@ import java.util.List;
 //CORS Filters
 @CrossOrigin(value = "*", allowedHeaders = "*")
 @Tag(name = "Авторы", description = "Контроллер для работы с авторами нашей библиотеки.")
+@SecurityRequirement(name = "Bearer Authentication")
 public class AuthorController {
     private final GenericService<Author, AuthorDTO> authorService;
     private final GenericService<Book, BookAuthorDTO> bookService;

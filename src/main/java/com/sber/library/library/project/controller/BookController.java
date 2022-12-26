@@ -72,11 +72,6 @@ public class BookController {
         book.getAuthors().add(author);
         return ResponseEntity.status(HttpStatus.CREATED).body(bookService.update(book));
     }
-//    @Operation(description = "Найти книгу по фильтру", method = "findBookByFilter")
-//    @RequestMapping(value = "/findBookByFilter", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<List<BookAuthorDTO>> findBookByFilter(@RequestBody SearchDTO searchDTO){
-//        return ResponseEntity.status(HttpStatus.OK).body(((BookService)bookService).searchBooks(searchDTO));
-//    }
 }
 
 

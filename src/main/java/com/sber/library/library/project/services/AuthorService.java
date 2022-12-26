@@ -9,6 +9,7 @@ import com.sber.library.library.project.repository.BookRepository;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +35,8 @@ public class AuthorService extends GenericService<Author, AuthorDTO> {
         Author author = authorRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Author with such id " + id + " not found!"));
         author.setAuthorFIO(object.getAuthorFIO());
-        author.setAuthorDescription(object.getDescription());
-        author.setAuthorLifePeriod(object.getLifePeriod());
+        author.setDescription(object.getDescription());
+        author.setLifePeriod(object.getLifePeriod());
         return authorRepository.save(author);
     }
 
@@ -43,10 +44,10 @@ public class AuthorService extends GenericService<Author, AuthorDTO> {
     public Author createFromDTO(AuthorDTO newDtoObject) {
         Author newAuthor = new Author();
         newAuthor.setAuthorFIO(newDtoObject.getAuthorFIO());
-        newAuthor.setAuthorDescription(newDtoObject.getDescription());
-        newAuthor.setAuthorLifePeriod(newDtoObject.getLifePeriod());
+        newAuthor.setDescription(newDtoObject.getDescription());
+        newAuthor.setLifePeriod(newDtoObject.getLifePeriod());
         newAuthor.setCreatedBy(newDtoObject.getCreatedBy());
-        newAuthor.setCreatedWhen(newDtoObject.getCreatedWhen());
+        newAuthor.setCreatedWhen(LocalDateTime.now());
         return authorRepository.save(newAuthor);
     }
 
@@ -67,7 +68,6 @@ public class AuthorService extends GenericService<Author, AuthorDTO> {
         return authorRepository.findById(objectId).orElseThrow(
                 () -> new NotFoundException("Author with such id " + objectId + " not found!"));
     }
-
 
     @Override
     public List<Author> listAll() {

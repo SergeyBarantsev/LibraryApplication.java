@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,6 +46,19 @@ public class BookService extends GenericService<Book, BookAuthorDTO> {
         return bookRepository.save(book);
     }
 
+    public Book createFromDTO(BookDTO bookDTO) {
+        Book book = new Book();
+        book.setTitle(bookDTO.getTitle());
+        book.setAmount(bookDTO.getAmount());
+        book.setGenre(bookDTO.getGenre());
+        book.setOnlineCopy(bookDTO.getOnlineCopy());
+        book.setPublishYear(bookDTO.getPublishYear());
+        book.setStoragePlace(bookDTO.getStoragePlace());
+        book.setCreatedBy(bookDTO.getCreatedBy());
+        book.setCreatedWhen(LocalDateTime.now());
+        return bookRepository.save(book);
+    }
+
     @Override
     public Book createFromDTO(BookAuthorDTO newDtoObject) {
         Book book = new Book();
@@ -55,7 +69,7 @@ public class BookService extends GenericService<Book, BookAuthorDTO> {
         book.setPublishYear(newDtoObject.getPublishYear());
         book.setStoragePlace(newDtoObject.getStoragePlace());
         book.setCreatedBy(newDtoObject.getCreatedBy());
-        book.setCreatedWhen(newDtoObject.getCreatedWhen());
+        book.setCreatedWhen(LocalDateTime.now());
         Set<Author> authors = new HashSet<>(authorRepository.findAllById(newDtoObject.getAuthorIds()));
         book.setAuthors(authors);
         return bookRepository.save(book);

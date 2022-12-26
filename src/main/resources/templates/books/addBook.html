@@ -1,0 +1,51 @@
+<!--Добавление книги-->
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить Книгу</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!--Форма добавления книги-->
+    <!--action="" - url на который будут отправлены данные-->
+    <!--object="" - имя объекта в котором будут храниться данные (нужно чтобы потом в контроллере их распарсить)-->
+    <form method="POST" th:action="@{/books/add}" th:object="${bookForm}">
+        <div class="mb-3">
+            <label for="title" class="form-label">Название</label>
+            <input name="title" type="text" class="form-control" id="title">
+        </div>
+        <div class="mb-3">
+            <label for="onlineCopy" class="form-label">Онлайн копия</label>
+            <input type="file" name="file" id="onlineCopy">
+        </div>
+        <div class="mb-3">
+            <label for="storagePlace" class="form-label">Место хранения</label>
+            <input name="storagePlace" type="text" class="form-control" id="storagePlace">
+        </div>
+        <div class="mb-3">
+            <label for="amount" class="form-label">Количество</label>
+            <input name="amount" type="text" class="form-control" id="amount">
+        </div>
+        <div class="mb-3">
+            <label for="publishYear" class="form-label">Год издания</label>
+            <input name="publishYear" type="text" class="form-control" id="publishYear">
+        </div>
+        <!--Нужно динамически брать значения из нашего ENUM-->
+        <div class="mb-3">
+            <label for="genre" class="form-label">Жанр</label>
+            <select class="form-select" name="genre" id="genre" aria-label="Default select example">
+                <option selected>Выберете жанр книги</option>
+                <option value="FANTASY">Фантастика</option>
+                <option value="SCIENCE_FICTION">Научная фантастика</option>
+                <option value="DRAMA">Драма</option>
+                <option value="NOVEL">Роман</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить книгу</button>
+    </form>
+</div>
+</body>
+</html>
