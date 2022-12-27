@@ -1,6 +1,7 @@
 package com.sber.library.library.project.MVC.controller;
 
 import com.sber.library.library.project.dto.BookDTO;
+import com.sber.library.library.project.dto.BookSearchDTO;
 import com.sber.library.library.project.services.BookAuthorService;
 import com.sber.library.library.project.services.BookService;
 import org.springframework.stereotype.Controller;
@@ -41,5 +42,12 @@ public class MVCBookController {
     public String delete(@PathVariable Long id) {
         bookService.delete(id);
         return "redirect:/books";
+    }
+
+    @PostMapping("/search")
+    public String searchBooks(@ModelAttribute("bookSearchForm") @Valid BookSearchDTO booksSearchDTO,
+                              Model model) {
+        model.addAttribute("books", bookService.searchBooks(booksSearchDTO));
+        return "books/viewAllBooks";
     }
 }

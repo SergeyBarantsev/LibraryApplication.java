@@ -10,6 +10,7 @@ import org.webjars.NotFoundException;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -96,5 +97,23 @@ public class BookService extends GenericService<Book, BookAuthorDTO> {
     @Override
     public List<Book> listAll() {
         return bookRepository.findAll();
+    }
+
+    public List<BookAuthorDTO> searchBooks(BookSearchDTO booksSearchDTO) {
+        String genre = booksSearchDTO.getGenre() != null ? String.valueOf(booksSearchDTO.getGenre().ordinal()) : "%";
+        List<Book> books = bookRepository.searchBooks(genre,
+                booksSearchDTO.getBookTitle(),
+                booksSearchDTO.getAuthorFIO());
+        List<BookAuthorDTO> bookAuthorDTOList = new ArrayList<>();
+        for (Book book : books) {
+            List<AuthorDTO> authorDTOs = new ArrayList<>();
+            for (Author author : book.getAuthors()) {
+                AuthorDTO authorDTO = new AuthorDTO(author);
+                authorDTOs.add(authorDTO);
+            }
+            BookAuthorDTO bookAuthorDTO = new BookAuthorDTO(book, authorDTOs);
+            bookAuthorDTOList.add(bookAuthorDTO);
+        }
+        return bookAuthorDTOList;
     }
 }

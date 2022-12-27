@@ -1,6 +1,7 @@
 <!--страница с книгами-->
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultra.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout}"
       lang="en">
 <head>
@@ -11,14 +12,52 @@
 <div layout:fragment="content">
     <h1>Книги библиотеки</h1>
     <a
-            th:href="'books/add'"
+            sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('ROLE_LIBRARIAN'))"
+            th:href="'/books/add'"
             class="btn btn-secondary"
             role="button"
             style="float: right"
-            aria-disabled="true">Добавить книгу
-    </a>
+            aria-disabled="true">Добавить книгу</a>
     <div>
+        <br>
+        <h4>Поиск</h4>
+        <div class="row">
+            <div class="col">
+                <form method="POST" th:action="@{/books/search}" th:object="${bookSearchForm}">
+                    <div class="row">
+                        <div class="col-auto">
+                            <label for="bookTitle" class="col-form-label">Название книги</label>
+                        </div>
+                        <div class="col-auto">
+                            <input name="bookTitle" type="text" class="form-control" id="bookTitle">
+                        </div>
+                        <div class="col-auto">
+                            <label for="authorFIO" class="col-form-label">Автор</label>
+                        </div>
+                        <div class="col-auto">
+                            <input name="authorFIO" type="text" class="form-control" id="authorFIO">
+                        </div>
+                        <div class="col-auto">
+                            <label for="genre" class="col-form-label">Жанр</label>
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-select" name="genre" id="genre" aria-label="Default select example">
+                                <option selected th:value="null">Выберете жанр из списка:</option>
+                                <option th:each="genre : ${T(com.sber.library.library.project.model.Genre).values()}"
+                                        th:value="${genre}" th:text="${genre.getGenreText()}"></option>
+                            </select>
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary">Поиск</button>
+                        </div>
 
+
+                    </div>
+                </form>
+            </div>
+        </div>
+        <br>
+        <br>
     </div>
     <table class="table">
         <thead>
@@ -48,10 +87,12 @@
                 </ul>
             </td>
             <td>
-                <a th:href="'/books/delete/'+${book.id}"
-                   class="btn btn-primary"
-                   role="button"
-                   aria-disabled="true">Удалить
+                <a
+                        sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('ROLE_LIBRARIAN'))"
+                        th:href="'/books/delete/'+${book.id}"
+                        class="btn btn-primary"
+                        role="button"
+                        aria-disabled="true">Удалить
                 </a>
             </td>
         </tr>

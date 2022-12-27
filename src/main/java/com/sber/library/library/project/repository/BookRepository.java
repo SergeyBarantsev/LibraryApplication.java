@@ -12,4 +12,21 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findBooksByAuthors(Author author);
+
+//    List<Book> findAllByGenreOrAuthorsAuthorFIOOrTitle(Genre genre, String authorFIO, String title);
+
+    @Query(nativeQuery = true,
+            value = """
+                      select *
+                      from books b
+                      left join books_authors ba on b.id = ba.book_id
+                      left join authors a on a.id = ba.author_id
+                      where lower(b.book_title) like '%' || lower(:title) || '%'
+                      and cast(b.book_genre as char) like COALESCE(:genre, '%')
+                      and coalesce(lower(a.author_fio), '%') like '%' || lower(:fio) || '%'
+                    """)
+    List<Book> searchBooks(@Param(value = "genre") String genre,
+                           @Param(value = "title") String title,
+                           @Param(value = "fio") String fio);
+
 }

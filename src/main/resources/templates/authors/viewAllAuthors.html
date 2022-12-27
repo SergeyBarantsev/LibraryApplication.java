@@ -1,6 +1,7 @@
 <!--страница с авторами-->
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultra.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout}"
       lang="en">
 <head>
@@ -11,12 +12,12 @@
 <div layout:fragment="content">
     <h1>Авторы библиотеки</h1>
     <a
+            sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('ROLE_LIBRARIAN'))"
             th:href="'authors/add'"
             class="btn btn-secondary"
             role="button"
             style="float: right"
-            aria-disabled="true">Добавить автора
-    </a>
+            aria-disabled="true">Добавить автора</a>
     <div>
 
     </div>

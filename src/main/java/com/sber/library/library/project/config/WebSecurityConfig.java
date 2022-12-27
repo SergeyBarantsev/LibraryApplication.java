@@ -16,13 +16,13 @@ import org.springframework.security.web.firewall.StrictHttpFirewall;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    private CustomUserDetailsService userService;
+    private final CustomUserDetailsService userService;
 
     public WebSecurityConfig(CustomUserDetailsService userService) {
         this.userService = userService;
     }
 
-    //Создаем бин нашего эвриптера паролей
+    //Создаем бин нашего энкриптера паролей
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -41,7 +41,7 @@ public class WebSecurityConfig {
         http.csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/login", "/users/registration")
+                .antMatchers("/login", "/users/registration", "/users/remember-password", "/users/change-password/**")
                 .permitAll()
                 .and()
                 .authorizeRequests()

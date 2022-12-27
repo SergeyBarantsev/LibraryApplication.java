@@ -6,6 +6,8 @@ import com.sber.library.library.project.model.User;
 import com.sber.library.library.project.repository.RoleRepository;
 import com.sber.library.library.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
@@ -18,15 +20,19 @@ import java.util.List;
 @Service
 public class UserService
         extends GenericService<User, UserDTO> {
+    private static final String CHANGE_PASSWORD_URL = "http://localhost:9090/users/change-password/";
 
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final JavaMailSender javaMailSender;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository,
+                       RoleRepository roleRepository,
+                       JavaMailSender javaMailSender) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.javaMailSender = javaMailSender;
     }
 
 
@@ -121,5 +127,24 @@ public class UserService
         user.setRole(role);
         update(user);
         return new UserDTO(user);
+    }
+
+    public UserDTO getUserByEmail(final String email) {
+        return new UserDTO(userRepository.findUserByUserBackUpEmail(email));
+    }
+
+    public void sendChangePasswordEmail(final String userBackUpEmail, final Long userId) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(userBackUpEmail);
+        message.setSubject("Восстановление пароля на сервисе \"Онлайн Библиотека\"");
+        message.setText("Добрый день! Вы получили это письмо, так как с вашего аккаунта была отправлена заявка на восстановление пароля. " +
+                "Для восстановления пароля, перейдите по ссылке: " + CHANGE_PASSWORD_URL + userId);
+        javaMailSender.send(message);
+    }
+
+    public void ChangePassword(Long userId, String userPassword) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User with such id " + userId + " not found!"));
+        user.setUserPassword(bCryptPasswordEncoder.encode(userPassword));
+        userRepository.save(user);
     }
 }

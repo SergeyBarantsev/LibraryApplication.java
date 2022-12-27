@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 @Setter
 @ToString
 public class UserDTO extends CommonDTO{
+    private Long id;
     private String userAddress;
     private String userBackUpEmail;
     private String userDateBirth;
@@ -23,6 +24,7 @@ public class UserDTO extends CommonDTO{
     private RoleDTO role;
 
     public UserDTO(final User user) {
+        this.id = user.getId();
         this.userAddress = user.getUserAddress();
         this.userBackUpEmail = user.getUserBackUpEmail();
         this.userDateBirth = user.getUserDateBirth().format(DateTimeFormatter.ISO_DATE);
