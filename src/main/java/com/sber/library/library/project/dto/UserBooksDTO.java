@@ -8,10 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
-
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 
 @NoArgsConstructor
@@ -20,8 +18,8 @@ import java.util.concurrent.TimeUnit;
 @Setter
 public class UserBooksDTO {
     private Long id;
-    private Date rentDate;
-    private Date returnDate;
+    private LocalDateTime rentDate;
+    private LocalDateTime returnDate;
     private boolean returned;
     private Long overdue;
 
@@ -33,6 +31,6 @@ public class UserBooksDTO {
         this.rentDate = publishing.getRentDate();
         this.returnDate = publishing.getReturnDate();
         this.returned = publishing.isReturned();
-        this.overdue = TimeUnit.MILLISECONDS.toDays(new Date().getTime()-returnDate.getTime()) ;
+        this.overdue = Duration.between(LocalDateTime.now(), returnDate).toDays();
     }
 }

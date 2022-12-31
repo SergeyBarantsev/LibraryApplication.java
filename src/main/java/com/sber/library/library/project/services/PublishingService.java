@@ -2,29 +2,32 @@ package com.sber.library.library.project.services;
 
 import com.sber.library.library.project.dto.PublishingDTO;
 import com.sber.library.library.project.dto.UserBooksDTO;
+import com.sber.library.library.project.model.Book;
 import com.sber.library.library.project.model.Publishing;
 import com.sber.library.library.project.model.User;
-import com.sber.library.library.project.repository.BookRepository;
 import com.sber.library.library.project.repository.PublishingRepository;
-import com.sber.library.library.project.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.time.LocalDateTime.now;
+
 
 @Service
+@Slf4j
 public class PublishingService extends GenericService<Publishing, PublishingDTO> {
-    private final UserRepository userRepository;
-    private final BookRepository bookRepository;
+    private final UserService userService;
+    private final BookService bookService;
     private final PublishingRepository publishingRepository;
 
-    public PublishingService(UserRepository userRepository,
-                             BookRepository bookRepository,
-                             PublishingRepository publishingRepository) {
-        this.userRepository = userRepository;
-        this.bookRepository = bookRepository;
+    public PublishingService(UserService userService, BookService bookService, PublishingRepository publishingRepository) {
+        this.userService = userService;
+        this.bookService = bookService;
         this.publishingRepository = publishingRepository;
     }
 
@@ -84,8 +87,7 @@ public class PublishingService extends GenericService<Publishing, PublishingDTO>
     }
 
     public List<UserBooksDTO> listOfOverdueBooks(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new NotFoundException("User with such id " + userId + " not found!"));
+        User user = userService.getOne(userId);
         List<UserBooksDTO> listOfOverdueBooks = new ArrayList<>();
         for (Publishing publishing : publishingRepository.findBooksByUser(user)) {
             if (!publishing.isReturned()) {
@@ -95,4 +97,31 @@ public class PublishingService extends GenericService<Publishing, PublishingDTO>
         }
         return listOfOverdueBooks;
     }
+
+    public Page<PublishingDTO> getUserPublishing(Long id, PageRequest pageRequest) {
+        return null;
+    }
+
+    public void rentABook(Long bookId,
+                          String name,
+                          int count,
+                          int period) {
+        User user = userService.getByUserName(name);
+        Book book = bookService.getOne(bookId);
+        book.setAmount(book.getAmount() - count);
+        bookService.update(book);
+        PublishingDTO publishDTO = new PublishingDTO(user, book, count, period);
+        Publishing publish = new Publishing();
+        publish.setBook(publishDTO.getBook());
+        publish.setUser(publishDTO.getUser());
+        publish.setRentDate(publishDTO.getRentDate());
+        publish.setRentPeriod(publishDTO.getRentPeriod());
+        publish.setReturned(publishDTO.isReturned());
+        publish.setReturnDate(publishDTO.getReturnDate());
+        publish.setAmount(publishDTO.getAmount());
+        publish.setCreatedBy("System");
+        publish.setCreatedWhen(now());
+        publishingRepository.save(publish);
+    }
+
 }

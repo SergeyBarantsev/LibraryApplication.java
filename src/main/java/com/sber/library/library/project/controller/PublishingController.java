@@ -1,6 +1,7 @@
 package com.sber.library.library.project.controller;
 
 import com.sber.library.library.project.dto.*;
+import com.sber.library.library.project.exception.MyDeleteException;
 import com.sber.library.library.project.model.Publishing;
 import com.sber.library.library.project.services.GenericService;
 import com.sber.library.library.project.services.PublishingService;
@@ -55,7 +56,7 @@ public class PublishingController {
 
     @Operation(description = "Удалить запись о выданной книге по id записи", method = "delete")
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> delete(@RequestParam(value = "publishingId") Long publishingId) {
+    public ResponseEntity<String> delete(@RequestParam(value = "publishingId") Long publishingId) throws MyDeleteException {
         publishingService.delete(publishingId);
         return ResponseEntity.status(HttpStatus.OK).body("Запись о выданной книге успешно удалена");
     }

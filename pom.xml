@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.sber.study.library</groupId>
     <artifactId>Java11LibraryProject</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1</version>
     <packaging>war</packaging>
     <name>Java11LibraryProject</name>
     <description>Java11LibraryProject</description>
@@ -64,10 +64,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-        <dependency>
             <groupId>nz.net.ultraq.thymeleaf</groupId>
             <artifactId>thymeleaf-layout-dialect</artifactId>
             <version>3.1.0</version>
@@ -114,6 +110,11 @@
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.6.12</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+            <exclusions></exclusions>
+        </dependency>
     </dependencies>
 
     <build>
@@ -132,5 +133,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

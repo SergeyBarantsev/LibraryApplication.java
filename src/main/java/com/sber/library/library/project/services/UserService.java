@@ -147,4 +147,12 @@ public class UserService
         user.setUserPassword(bCryptPasswordEncoder.encode(userPassword));
         userRepository.save(user);
     }
+
+    public User getByUserName(final String name) {
+        return userRepository.findUserByUserLogin(name);
+    }
+
+    public List<String> getUserEmailsWithDelayedRentDate() {
+        return userRepository.getDelayedEmails();
+    }
 }

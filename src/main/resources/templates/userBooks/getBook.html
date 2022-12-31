@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Взять книгу в аренду</title>
+    <script>
+        function isValidForm() {
+            let count = document.getElementById("count").value();
+            let amount = document.getElementById("book.amount").value();
+            if (count > amount) {
+                alert("В библиотеке недостаточно книг.");
+                return false;
+            } else {
+                return true;
+            }
+        }
+    </script>
+</head>
+<body>
+<div layout:fragment="content">
+    <h4 th:text="${book.getTitle()}"></h4>
+    <form method="POST" onsubmit="return isValidForm()" th:action="@{/publishing/get-book}" th:object="${bookForm}">
+        <input type="hidden" name="bookId" th:value="${book.id}">
+        <input type="hidden" name="book.amount" id="book.amount" th:value="${book.amount}">
+        <div class="mb-3 col-2">
+            <label for="count" class="form-label">Количество</label>
+            <input name="count" type="number" class="form-control" id="count">
+        </div>
+        <div class="mb-3 col-2">
+            <label for="period" class="form-label">Срок(месяцы)</label>
+            <input name="period" type="number" class="form-control" id="period">
+        </div>
+        <button type="submit" class="btn btn-primary">Взять книгу</button>
+        <button type="button" class="btn btn-secondary" onclick="window.history.back()">Назад</button>
+    </form>
+</div>
+</body>
+</html>

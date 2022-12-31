@@ -1,6 +1,5 @@
 package com.sber.library.library.project.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -45,6 +44,11 @@ public class Book extends GenericModel {
             foreignKey = @ForeignKey(name = "FK_BOOKS_AUTHORS"),
             inverseJoinColumns = @JoinColumn(name = "author_id"),
             inverseForeignKey = @ForeignKey(name = "FK_AUTHORS_BOOKS"))
-    @JsonIgnore
+//    @JsonIgnore
+    @ToString.Exclude
     private Set<Author> authors = new HashSet<>();
+
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    private Set<Publishing> publish;
+
 }

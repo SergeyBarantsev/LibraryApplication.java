@@ -24,7 +24,6 @@ public class AuthorService extends GenericService<Author, AuthorDTO> {
         this.bookRepository = bookRepository;
     }
 
-
     @Override
     public Author update(Author object) {
         return authorRepository.save(object);

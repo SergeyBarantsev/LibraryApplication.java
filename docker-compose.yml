@@ -1,0 +1,39 @@
+#docker-compose up  - terminal
+version: "3.9"
+services:
+  deploy:
+    depends_on:
+      - postgres
+    container_name: LibraryProject
+    build:
+      context: .
+      dockerfile: Docker
+    ports:
+      - "9090:9090"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://DataBaseLibraryProject:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+  postgres:
+    container_name: DataBaseLibraryProject
+    image: postgres
+    environment:
+      POSTGRES_DB: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "5432:5432"
+    #    healthcheck:
+    #      test: ["CMD-SHELL", "pg_isready -U habrpguser -d habrdb"]
+    #      interval: 10s
+    #      timeout: 5s
+    #      retries: 5
+    #      start_period: 10s
+#    restart: unless-stopped
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '1'
+#          memory: 4G
+#    networks:
+#      - postgres

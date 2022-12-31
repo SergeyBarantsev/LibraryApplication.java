@@ -33,5 +33,6 @@ public class Author extends GenericModel {
             CascadeType.MERGE,
             CascadeType.REFRESH},
             fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Set<Book> books = new HashSet<>();
 }

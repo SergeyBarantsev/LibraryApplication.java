@@ -1,6 +1,8 @@
 package com.sber.library.library.project.MVC.controller;
 
 import com.sber.library.library.project.dto.UserDTO;
+import com.sber.library.library.project.repository.UserRepository;
+import com.sber.library.library.project.services.MailScheduler;
 import com.sber.library.library.project.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -14,13 +16,18 @@ import javax.validation.Valid;
 @Slf4j
 @RequestMapping("/users")
 public class MVCUserController {
+    private final UserRepository userRepository;
     private final UserService userService;
+    private MailScheduler mailScheduler;
 
-    public MVCUserController(UserService userService) {
+    public MVCUserController(UserService userService,
+                             UserRepository userRepository, MailScheduler mailScheduler) {
         this.userService = userService;
+        this.userRepository = userRepository;
+        this.mailScheduler = mailScheduler;
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public String index(HttpServletRequest httpServletRequest, Model model) {
         return "index";
     }
@@ -34,7 +41,7 @@ public class MVCUserController {
     public String createUser(@ModelAttribute("userForm") @Valid UserDTO userDTO) {
         log.info("Создание нового пользователя" + userDTO);
         userService.createFromDTO(userDTO);
-        return "redirect:login";
+        return "redirect:/login";
     }
 
     @GetMapping("/remember-password")
@@ -61,6 +68,29 @@ public class MVCUserController {
                                                @ModelAttribute("changePasswordForm") @Valid UserDTO userDTO) {
         userService.ChangePassword(userId, userDTO.getUserPassword());
         log.info("changePasswordAfterEmailSent: " + userId + " " + userDTO.getUserPassword());
-        return "redirect:/login";
+        return "redirect:/";
+    }
+
+    @GetMapping("/profile/{userId}")
+    public String userProfile(@PathVariable Long userId,
+                              Model model) {
+        model.addAttribute("user", userService.getOne(userId));
+        return "/users/viewProfile";
+    }
+
+    @GetMapping("/profile/update/{userId}")
+    public String updateProfile(@PathVariable Long userId,
+                                Model model) {
+        model.addAttribute("user", userService.getOne(userId));
+        return "/users/updateProfile";
+    }
+
+    @PostMapping("/profile/update")
+    public String updateProfile(@ModelAttribute("userForm") @Valid UserDTO userDTO,
+                                HttpServletRequest request) {
+        Long userId = Long.valueOf(request.getParameter("id"));
+        userService.updateFromDTO(userDTO, userId);
+        log.info(userDTO.toString());
+        return "redirect:/users/profile/" + userId;
     }
 }

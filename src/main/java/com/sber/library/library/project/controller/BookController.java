@@ -2,6 +2,8 @@ package com.sber.library.library.project.controller;
 
 import com.sber.library.library.project.dto.AuthorDTO;
 import com.sber.library.library.project.dto.BookAuthorDTO;
+import com.sber.library.library.project.dto.BookDTO;
+import com.sber.library.library.project.exception.MyDeleteException;
 import com.sber.library.library.project.model.Author;
 import com.sber.library.library.project.model.Book;
 import com.sber.library.library.project.services.GenericService;
@@ -21,10 +23,10 @@ import java.util.List;
 @CrossOrigin(value = "*", allowedHeaders = "*")
 @Tag(name = "Книги", description = "Контроллер для работы с книгами нашей библиотеки.")
 public class BookController {
-    private final GenericService<Book, BookAuthorDTO> bookService;
+    private final GenericService<Book, BookDTO> bookService;
     private final GenericService<Author, AuthorDTO> authorService;
 
-    public BookController(GenericService<Book, BookAuthorDTO> bookService,
+    public BookController(GenericService<Book, BookDTO> bookService,
                           GenericService<Author, AuthorDTO> authorService) {
         this.bookService = bookService;
         this.authorService = authorService;
@@ -58,7 +60,7 @@ public class BookController {
 
     @Operation(description = "Удалить книгу по id", method = "delete")
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> delete(@RequestParam(value = "bookId") Long bookId) {
+    public ResponseEntity<String> delete(@RequestParam(value = "bookId") Long bookId) throws MyDeleteException {
         bookService.delete(bookId);
         return ResponseEntity.status(HttpStatus.OK).body("Книга успешно удалена");
     }

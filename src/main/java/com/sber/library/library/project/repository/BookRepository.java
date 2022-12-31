@@ -29,4 +29,10 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                            @Param(value = "title") String title,
                            @Param(value = "fio") String fio);
 
+    @Query(nativeQuery = true, value = """
+            select returned
+            from books b inner join publishing p on b.id = p.book_id
+            where book_id=(:id)
+            """)
+    boolean isBookReturned(Long id);
 }

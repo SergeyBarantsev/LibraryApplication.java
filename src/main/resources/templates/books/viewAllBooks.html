@@ -77,7 +77,12 @@
         <tr th:each="book: ${books}">
             <td th:text="${book.title}"></td>
             <td th:text="${book.genre.getGenreText}"></td>
-            <td th:text="${book.onlineCopy}"></td>
+            <!--            <td th:text="${book.onlineCopy}"></td>-->
+            <td>
+                <a th:if="${book.onlineCopy} != ''" th:href="@{|/books/download?bookId=${book.id}|}">
+                    <span>Скачать книгу</span>
+                </a>
+            </td>
             <td th:text="${book.storagePlace}"></td>
             <td th:text="${book.amount}"></td>
             <td th:text="${book.publishYear}"></td>
@@ -88,16 +93,63 @@
             </td>
             <td>
                 <a
-                        sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('ROLE_LIBRARIAN'))"
-                        th:href="'/books/delete/'+${book.id}"
+                        sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('LIBRARIAN'))"
+                        th:href="'/books/update/' + ${book.id}"
                         class="btn btn-primary"
                         role="button"
-                        aria-disabled="true">Удалить
-                </a>
+                        aria-disabled="true">Изменить</a>
+                <a
+                        th:href="'/books/' + ${book.id}"
+                        class="btn btn-primary"
+                        role="button"
+                        aria-disabled="true">Просмотреть</a>
+                <a sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('LIBRARIAN'))"
+                   th:href="'/books/delete/' + ${book.id}"
+                   class="btn btn-primary"
+                   role="button"
+                   onclick="return confirm('Вы действительно хотите удалить запись?');"
+                   aria-disabled="true">Удалить</a>
+                <a
+                        sec:authorize="isAuthenticated() && hasRole('USER')"
+                        th:href="'/publishing/get-book/' + ${book.id}"
+                        class="btn btn-primary"
+                        role="button"
+                        aria-disabled="true">Взять книгу</a>
+
+                <script>
+                    function confirmDelete() {
+                        return 'Are you sure you want to leave?';
+                    }
+                </script>
+
             </td>
         </tr>
         </tbody>
     </table>
+    <nav aria-label="Pagination" th:if="${books.totalPages gt 0}">
+        <ul class="pagination justify-content-center font-weight-bold">
+            <li class="page-item" th:classappend="${books.number eq 0} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/books?page={id}(id=${books.number lt 2 ? 1 : books.number})}"
+                   aria-label="Previous" title="Previous Page" data-toggle="tooltip">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item" th:classappend="${i eq books.number + 1} ? 'active'"
+                th:each="i : ${#numbers.sequence( 1, books.totalPages, 1)}">
+                <a class="page-link" th:href="@{/books?page={id}(id=${i})}" th:text="${i}"
+                   th:title="${'Page '+ i}" data-toggle="tooltip"></a>
+            </li>
+            <li class="page-item" th:classappend="${books.number eq books.totalPages - 1} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/books?page={id}(id=${books.number + 2})}"
+                   aria-label="Next" title="Next Page" data-toggle="tooltip">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <button class="btn btn-secondary" onclick="window.history.back()">Назад</button>
 </div>
 </body>
 </html>

@@ -1,0 +1,21 @@
+<!--Просмотр книги-->
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о книге</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <h3 th:text="${book.title}"></h3>
+    <p th:text="'Жанр: ' + ${book.genre.getGenreText()} "></p>
+    <p th:text="'Описание: ' + ${book.publishYear}"></p>
+    <p th:text="'Автор: ' + ${book.getAuthors()}"></p>
+    <button class="btn btn-secondary" onclick="window.history.back()">Назад</button>
+</div>
+</body>
+</html>
+

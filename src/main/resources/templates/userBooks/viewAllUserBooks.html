@@ -1,0 +1,98 @@
+<!--Просмотр книг пользователя-->
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Арендованные книги</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1 th:text="'Арендованные книги ' + ${userFio}"></h1>
+    <h4>Поиск</h4>
+    <div class="row">
+        <div class="col">
+            <form method="POST" th:action="@{/publishing/user-books/{userId}/search(userId=${userId})}"
+                  th:object="${publishSearchForm}">
+                <div class="row">
+                    <div class="col-auto">
+                        <label for="bookTitleSearch" class="col-form-label">Название книги</label>
+                    </div>
+                    <div class="col-auto">
+                        <input name="bookTitleSearch" type="text" class="form-control" id="bookTitleSearch">
+                    </div>
+
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary">Поиск</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Книга</th>
+            <th scope="col">Количество</th>
+            <th scope="col">Дата взятия книги</th>
+            <th scope="col">Плановая дата возвращения</th>
+            <th scope="col">Возвращена</th>
+            <th scope="col">Период аренды</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--        Перебор пользователей-->
+        <tr th:each="publish: ${publish}">
+            <td th:text="${publish.book.title}"></td>
+            <td th:text="${publish.amount}"></td>
+            <td th:text="${publish.rentDateOutput}"></td>
+            <td th:if="${!publish.delayed}" th:text="${publish.returnDateOutput}"></td>
+            <td th:if="${publish.delayed}" style="color: red" th:text="${publish.returnDateOutput}"></td>
+            <td th:text="${publish.returned} ? 'Да' : 'Нет'"></td>
+            <td th:text="${publish.rentPeriod} + ' месяц(а)'"></td>
+            <td>
+                <a
+                        th:if="!${publish.returned}"
+                        th:href="'/publish/return-book/' + ${publish.id}"
+                        class="btn btn-primary"
+                        role="button"
+                        aria-disabled="true">Вернуть книгу</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <button sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('LIBRARIAN'))"
+            type="button" class="btn btn-secondary" onclick="window.history.back()">Назад
+    </button>
+
+    <nav aria-label="Pagination" th:if="${publish.totalPages gt 0}">
+        <ul class="pagination justify-content-center font-weight-bold">
+            <li class="page-item" th:classappend="${publish.number eq 0} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/publish/user-books/{userId}?page={id}(id=${publish.number lt 2 ? 1 : publish.number}, userId=${userId})}"
+                   aria-label="Previous" title="Previous Page" data-toggle="tooltip">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item" th:classappend="${i eq publish.number + 1} ? 'active'"
+                th:each="i : ${#numbers.sequence( 1, publish.totalPages, 1)}">
+                <a class="page-link" th:href="@{/publish/user-books/{userId}?page={id}(id=${i}, userId=${userId})}"
+                   th:text="${i}"
+                   th:title="${'Page '+ i}" data-toggle="tooltip"></a>
+            </li>
+            <li class="page-item" th:classappend="${publish.number eq publish.totalPages - 1} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/publish/user-books/{userId}?page={id}(id=${publish.number + 1}, userId=${userId})}"
+                   aria-label="Next" title="Next Page" data-toggle="tooltip">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>

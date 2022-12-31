@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль пользователя</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <br>
+    <h1>Профиль</h1>
+    <p>Логин: <span th:text="${user.userLogin}"></span></p>
+    <p>Имя: <span th:text="${user.userFirstName}"></span></p>
+    <p>Фамилия: <span th:text="${user.userLastName}"></span></p>
+    <p>Отчество: <span th:text="${user.userMiddleName}"></span></p>
+    <p>Почта: <span th:text="${user.userBackUpEmail}"></span></p>
+    <p>Дата рождения: <span th:text="${user.userDateBirth}"></span></p>
+    <p>Телефон: <span th:text="${user.userPhone}"></span></p>
+    <p>Адрес: <span th:text="${user.userAddress}"></span></p>
+    <a th:href="'/users/profile/update/' + ${user.id}"
+       class="btn btn-primary"
+       role="button"
+       aria-disabled="true">Редактировать</a>
+    <a th:href="'/users/change-password/' + ${user.id}"
+       class="btn btn-primary"
+       role="button"
+       aria-disabled="true">Изменить пароль</a>
+    <a sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('LIBRARIAN'))"
+       th:href="'/publish/user-books/' + ${user.id}"
+       class="btn btn-primary"
+       role="button"
+       aria-disabled="true">Арендованные книги</a>
+    <button class="btn btn-secondary" onclick="window.history.back()">Назад</button>
+</div>
+</body>
+</html>

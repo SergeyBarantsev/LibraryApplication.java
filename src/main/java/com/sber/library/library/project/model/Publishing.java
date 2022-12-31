@@ -1,44 +1,43 @@
 package com.sber.library.library.project.model;
-
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "publishings")
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
-@SequenceGenerator(name = "default_gen", sequenceName = "publishings_seq", allocationSize = 1)
-public class Publishing extends GenericModel {
+@Entity
+@Table(name = "publishing")
+@SequenceGenerator(name = "default_gen", sequenceName = "publishing_seq", allocationSize = 1)
+public class Publishing
+        extends GenericModel {
 
-    @Column(name = "rent_date")
-    private Date rentDate;
+    @Column(name = "rent_date", nullable = false)
+    private LocalDateTime rentDate;
 
-    @Column(name = "rent_period")
-    private Integer rentPeriod;
+    @Column(name = "return_date", nullable = false)
+    private LocalDateTime returnDate;
 
-    @Column(name = "return_date")
-    private Date returnDate;
-
-    @Column(name = "returned")
+    @Column(name = "returned", nullable = false)
     private boolean returned;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST,
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.REFRESH},
-            fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_PUBLISHING_USER"))
+    @Column(name = "rent_period", nullable = false)
+    private Integer rentPeriod;
+
+    @Column(name = "amount")
+    private Integer amount;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "FK_PUBLISHING_USER"))
+    @JsonIgnore
     private User user;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST,
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.REFRESH},
-            fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_PUBLISHING_BOOK"))
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id", foreignKey = @ForeignKey(name = "FK_PUBLISHING_BOOK"))
+    @JsonIgnore
     private Book book;
 }

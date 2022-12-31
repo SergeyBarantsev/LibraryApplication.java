@@ -13,12 +13,14 @@ import com.sber.library.library.project.repository.BookRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 import java.sql.SQLException;
 
 
 @SpringBootApplication
+@EnableScheduling
 public class LibraryApplication implements CommandLineRunner {
 
 //    @Autowired

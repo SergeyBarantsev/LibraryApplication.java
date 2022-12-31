@@ -12,7 +12,7 @@
     <!--Форма добавления книги-->
     <!--action="" - url на который будут отправлены данные-->
     <!--object="" - имя объекта в котором будут храниться данные (нужно чтобы потом в контроллере их распарсить)-->
-    <form method="POST" th:action="@{/books/add}" th:object="${bookForm}">
+    <form method="POST" enctype="multipart/form-data" th:action="@{/books/add}" th:object="${bookForm}">
         <div class="mb-3">
             <label for="title" class="form-label">Название</label>
             <input name="title" type="text" class="form-control" id="title">
@@ -45,6 +45,7 @@
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Добавить книгу</button>
+        <button type="button" class="btn btn-secondary" onclick="window.history.back()">Назад</button>
     </form>
 </div>
 </body>

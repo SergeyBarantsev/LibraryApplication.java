@@ -3,6 +3,7 @@ package com.sber.library.library.project.controller;
 import com.sber.library.library.project.dto.AuthorDTO;
 import com.sber.library.library.project.dto.BookAuthorDTO;
 import com.sber.library.library.project.dto.BookDTO;
+import com.sber.library.library.project.exception.MyDeleteException;
 import com.sber.library.library.project.model.Author;
 import com.sber.library.library.project.model.Book;
 import com.sber.library.library.project.services.AuthorService;
@@ -25,9 +26,9 @@ import java.util.List;
 @SecurityRequirement(name = "Bearer Authentication")
 public class AuthorController {
     private final GenericService<Author, AuthorDTO> authorService;
-    private final GenericService<Book, BookAuthorDTO> bookService;
+    private final GenericService<Book, BookDTO> bookService;
 
-    public AuthorController(GenericService<Author, AuthorDTO> authorService, GenericService<Book, BookAuthorDTO> bookService) {
+    public AuthorController(GenericService<Author, AuthorDTO> authorService, GenericService<Book, BookDTO> bookService) {
         this.authorService = authorService;
         this.bookService = bookService;
     }
@@ -60,7 +61,7 @@ public class AuthorController {
 
     @Operation(description = "Удалить автора по id", method = "delete")
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> delete(@RequestParam(value = "authorId") Long authorId) {
+    public ResponseEntity<String> delete(@RequestParam(value = "authorId") Long authorId) throws MyDeleteException {
         authorService.delete(authorId);
         return ResponseEntity.status(HttpStatus.OK).body("Автор успешно удален");
     }
