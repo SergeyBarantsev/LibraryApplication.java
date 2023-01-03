@@ -91,8 +91,12 @@ public class MVCBookController {
 
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) throws MyDeleteException {
-        bookService.delete(id);
+    public String delete(@PathVariable Long id) {
+        try {
+            bookService.delete(id);
+        } catch (MyDeleteException exception) {
+            return "redirect:/error/delete?message=" + exception.getMessage();
+        }
         return "redirect:/books";
     }
 

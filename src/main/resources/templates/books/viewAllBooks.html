@@ -79,7 +79,7 @@
             <td th:text="${book.genre.getGenreText}"></td>
             <!--            <td th:text="${book.onlineCopy}"></td>-->
             <td>
-                <a th:if="${book.onlineCopy} != ''" th:href="@{|/books/download?bookId=${book.id}|}">
+                <a th:if="${book.onlineCopy} != null" th:href="@{|/books/download?bookId=${book.id}|}">
                     <span>Скачать книгу</span>
                 </a>
             </td>

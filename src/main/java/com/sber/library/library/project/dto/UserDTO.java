@@ -4,22 +4,29 @@ package com.sber.library.library.project.dto;
 import com.sber.library.library.project.model.User;
 import lombok.*;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 import java.time.format.DateTimeFormatter;
 
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class UserDTO extends CommonDTO{
+public class UserDTO extends CommonDTO {
     private Long id;
     private String userAddress;
+    @Email
     private String userBackUpEmail;
+
     private String userDateBirth;
     private String userFirstName;
+
     private String userLastName;
     private String userMiddleName;
     private String userLogin;
+    @Size(min = 3, message = "Пароль должен быть больше трех символов")
     private String userPassword;
+
     private String userPhone;
     private RoleDTO role;
 

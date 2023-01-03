@@ -12,11 +12,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/publishing")
+@RequestMapping("/rest/publishing")
 @CrossOrigin(value = "*", allowedHeaders = "*")
 @Tag(name = "Список выданных книг", description = "Контроллер для работы с книгами, которые взяли пользователь.")
 public class PublishingController {

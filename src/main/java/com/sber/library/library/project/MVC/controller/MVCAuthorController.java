@@ -1,9 +1,13 @@
 package com.sber.library.library.project.MVC.controller;
 
 import com.sber.library.library.project.dto.AuthorDTO;
+import com.sber.library.library.project.model.Author;
 import com.sber.library.library.project.services.AuthorService;
 import com.sber.library.library.project.services.BookAuthorService;
 import com.sber.library.library.project.services.BookService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,19 +18,18 @@ import javax.validation.Valid;
 @RequestMapping("/authors")
 public class MVCAuthorController {
     private final AuthorService authorService;
-    private final BookService bookService;
-    private final BookAuthorService bookAuthorService;
-
 
     public MVCAuthorController(AuthorService authorService, BookAuthorService bookAuthorService, BookService bookService) {
         this.authorService = authorService;
-        this.bookService = bookService;
-        this.bookAuthorService = bookAuthorService;
     }
 
     @GetMapping("")
-    public String index(Model model) {
-        model.addAttribute("authors", authorService.listAll());
+    public String index(@RequestParam(value = "page", defaultValue = "1") int page,
+                        @RequestParam(value = "size", defaultValue = "10") int size,
+                        Model model) {
+        PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.ASC, "authorFIO"));
+        Page<Author> result = authorService.getAllPaginated(pageRequest);
+        model.addAttribute("authors", result);
         return "authors/viewAllAuthors";
     }
 

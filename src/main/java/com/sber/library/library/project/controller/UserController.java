@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/rest/users")
 //CORS Filters
 @CrossOrigin(value = "*", allowedHeaders = "*")
 @Tag(name = "Пользователи", description = "Контроллер для работы с пользователями нашей библиотеки.")

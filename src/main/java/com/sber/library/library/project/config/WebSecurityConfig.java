@@ -22,7 +22,7 @@ public class WebSecurityConfig {
         this.userService = userService;
     }
 
-    //Создаем бин нашего энкриптера паролей
+//    Создаем бин нашего энкриптера паролей
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();

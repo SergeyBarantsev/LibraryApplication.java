@@ -1,9 +1,11 @@
 package com.sber.library.library.project.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -48,5 +50,9 @@ public class User
             CascadeType.REFRESH},
             fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_USER_ROLE"))
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Publishing> publish;
 }

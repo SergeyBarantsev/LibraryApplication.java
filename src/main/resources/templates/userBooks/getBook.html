@@ -7,9 +7,7 @@
     <title>Взять книгу в аренду</title>
     <script>
         function isValidForm() {
-            let count = document.getElementById("count").value();
-            let amount = document.getElementById("book.amount").value();
-            if (count > amount) {
+            if (document.getElementById("count").value > document.getElementById("amount").value) {
                 alert("В библиотеке недостаточно книг.");
                 return false;
             } else {
@@ -23,7 +21,10 @@
     <h4 th:text="${book.getTitle()}"></h4>
     <form method="POST" onsubmit="return isValidForm()" th:action="@{/publishing/get-book}" th:object="${bookForm}">
         <input type="hidden" name="bookId" th:value="${book.id}">
-        <input type="hidden" name="book.amount" id="book.amount" th:value="${book.amount}">
+        <input type="hidden"
+               name="amount"
+               id="amount"
+               th:value="${book.amount}">
         <div class="mb-3 col-2">
             <label for="count" class="form-label">Количество</label>
             <input name="count" type="number" class="form-control" id="count">

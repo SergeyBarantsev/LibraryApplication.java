@@ -16,16 +16,16 @@ import java.time.LocalDateTime;
 public class Publishing
         extends GenericModel {
 
-    @Column(name = "rent_date", nullable = false)
+    @Column(name = "rent_date")
     private LocalDateTime rentDate;
 
-    @Column(name = "return_date", nullable = false)
+    @Column(name = "return_date")
     private LocalDateTime returnDate;
 
-    @Column(name = "returned", nullable = false)
+    @Column(name = "returned")
     private boolean returned;
 
-    @Column(name = "rent_period", nullable = false)
+    @Column(name = "rent_period")
     private Integer rentPeriod;
 
     @Column(name = "amount")
@@ -36,7 +36,8 @@ public class Publishing
     @JsonIgnore
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.ALL},
+            fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", foreignKey = @ForeignKey(name = "FK_PUBLISHING_BOOK"))
     @JsonIgnore
     private Book book;

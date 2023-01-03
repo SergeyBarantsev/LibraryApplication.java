@@ -81,7 +81,7 @@
 //                .and()
 //                .authorizeRequests()
 //                //Доступ только для авторизованных пользователей
-//                .antMatchers("/authors/**").hasRole("USER")
+//                .antMatchers("/rest/authors/**").hasRole("USER")
 //                .anyRequest().permitAll()
 //                .and()
 //                //JWT Token VALID or NOT

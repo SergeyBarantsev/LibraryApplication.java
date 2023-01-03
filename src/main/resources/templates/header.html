@@ -23,9 +23,14 @@
                         class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/users/all">Пользователи</a>
                     </li>
-                    <li th:each="authority : ${#authentication.getAuthorities()}"
-                        th:if="${authority.getAuthority()}=='LIBRARIAN'">
-                        <a class="nav-link active" aria-current="page" href="/users/all">Пользователи</a>
+                    <!--                    <li th:each="authority : ${#authentication.getAuthorities()}"-->
+                    <!--                        th:if="${authority.getAuthority()}=='LIBRARIAN'">-->
+                    <!--                        <a class="nav-link active" aria-current="page" href="/users/all">Пользователи</a>-->
+                    <!--                    </li>-->
+                    <li sec:authorize="isAuthenticated() && (hasRole('USER'))" class="nav-item">
+                        <a class="nav-link active" aria-current="page"
+                           th:href="'/publishing/user-books/' + ${#authentication.getPrincipal().getUserId()}">Мои
+                            книги</a>
                     </li>
                 </ul>
                 <form sec:authorize="isAuthenticated() && !hasRole('ADMIN')" class="d-flex">

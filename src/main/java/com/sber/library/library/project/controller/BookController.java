@@ -1,7 +1,6 @@
 package com.sber.library.library.project.controller;
 
 import com.sber.library.library.project.dto.AuthorDTO;
-import com.sber.library.library.project.dto.BookAuthorDTO;
 import com.sber.library.library.project.dto.BookDTO;
 import com.sber.library.library.project.exception.MyDeleteException;
 import com.sber.library.library.project.model.Author;
@@ -18,7 +17,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/books")
+@RequestMapping("/rest/books")
 //CORS Filters
 @CrossOrigin(value = "*", allowedHeaders = "*")
 @Tag(name = "Книги", description = "Контроллер для работы с книгами нашей библиотеки.")
@@ -47,13 +46,13 @@ public class BookController {
 
     @Operation(description = "Добавить книгу в библиотеку", method = "add")
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Book> add(@RequestBody BookAuthorDTO newBook) {
+    public ResponseEntity<Book> add(@RequestBody BookDTO newBook) {
         return ResponseEntity.status(HttpStatus.CREATED).body(bookService.createFromDTO(newBook));
     }
 
     @Operation(description = "Изменить информацию о книге по id", method = "updateBook")
     @RequestMapping(value = "/update", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Book> updateBook(@RequestBody BookAuthorDTO book,
+    public ResponseEntity<Book> updateBook(@RequestBody BookDTO book,
                                            @RequestParam(value = "bookId") Long bookId) {
         return ResponseEntity.status(HttpStatus.OK).body(bookService.updateFromDTO(book, bookId));
     }

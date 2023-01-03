@@ -2,13 +2,15 @@ package com.sber.library.library.project.services;
 
 import com.sber.library.library.project.dto.PublishingDTO;
 import com.sber.library.library.project.dto.UserBooksDTO;
+import com.sber.library.library.project.dto.UserPublishDTO;
 import com.sber.library.library.project.model.Book;
 import com.sber.library.library.project.model.Publishing;
 import com.sber.library.library.project.model.User;
 import com.sber.library.library.project.repository.PublishingRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
@@ -98,9 +100,24 @@ public class PublishingService extends GenericService<Publishing, PublishingDTO>
         return listOfOverdueBooks;
     }
 
-    public Page<PublishingDTO> getUserPublishing(Long id, PageRequest pageRequest) {
-        return null;
+    public Page<PublishingDTO> getUserPublishing(Long id,
+                                                 Pageable pageable) {
+        UserPublishDTO userPublishDTO = new UserPublishDTO(userService.getOne(id));
+        return new PageImpl<>(new ArrayList<>(userPublishDTO.getPublishDTOSet()),
+                pageable,
+                userPublishDTO.getPublishDTOSet().size());
     }
+
+    public Page<PublishingDTO> searchPublish(PublishingDTO publishDTO,
+                                             Pageable pageable) {
+        List<Publishing> publishes = publishingRepository.findAllByBookTitleContainingIgnoreCase(publishDTO.getBookTitleSearch());
+        List<PublishingDTO> publishDTOS = new ArrayList<>();
+        for (Publishing p : publishes) {
+            publishDTOS.add(new PublishingDTO(p));
+        }
+        return new PageImpl<>(publishDTOS, pageable, publishDTOS.size());
+    }
+
 
     public void rentABook(Long bookId,
                           String name,
@@ -124,4 +141,13 @@ public class PublishingService extends GenericService<Publishing, PublishingDTO>
         publishingRepository.save(publish);
     }
 
+    public void returnBook(Long publishId) {
+        Publishing publish = getOne(publishId);
+        publish.setReturned(true);
+        Book book = publish.getBook();
+        book.setAmount(book.getAmount() + publish.getAmount());
+        publishingRepository.save(publish);
+        bookService.update(book);
+    }
 }
+

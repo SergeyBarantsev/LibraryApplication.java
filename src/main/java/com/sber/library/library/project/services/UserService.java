@@ -6,6 +6,9 @@ import com.sber.library.library.project.model.User;
 import com.sber.library.library.project.repository.RoleRepository;
 import com.sber.library.library.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -155,4 +158,19 @@ public class UserService
     public List<String> getUserEmailsWithDelayedRentDate() {
         return userRepository.getDelayedEmails();
     }
+
+    public Page<User> listAllPaginated(Pageable pageable) {
+        Page<User> users = userRepository.findAll(pageable);
+        return new PageImpl<>(users.getContent(), pageable, users.getTotalElements());
+    }
+
+    public Page<User> findUsers(UserDTO user,
+                                Pageable pageable) {
+        List<User> users = userRepository.findUsers(user.getUserLogin(),
+                user.getUserFirstName(),
+                user.getUserLastName());
+        return new PageImpl<>(users, pageable, users.size());
+    }
+
+
 }

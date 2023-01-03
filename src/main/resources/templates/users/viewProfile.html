@@ -28,7 +28,7 @@
        role="button"
        aria-disabled="true">Изменить пароль</a>
     <a sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('LIBRARIAN'))"
-       th:href="'/publish/user-books/' + ${user.id}"
+       th:href="'/publishing/user-books/' + ${user.id}"
        class="btn btn-primary"
        role="button"
        aria-disabled="true">Арендованные книги</a>

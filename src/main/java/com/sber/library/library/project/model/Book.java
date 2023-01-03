@@ -48,7 +48,7 @@ public class Book extends GenericModel {
     @ToString.Exclude
     private Set<Author> authors = new HashSet<>();
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "book",
+            cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     private Set<Publishing> publish;
-
 }

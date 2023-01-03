@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Регистрация</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <form method="POST" th:action="@{/users/add-librarian}" th:object="${userForm}" style="margin: 0 auto">
+        <div class="row">
+            <div class="col-auto">
+                <label for="login" class="form-label">Логин</label>
+                <input name="userLogin" th:field="*{userLogin}" type="text" class="form-control" id="login">
+                <div
+                        class="alert alert-warning"
+                        th:if="${#fields.hasErrors('userLogin')}"
+                        th:errors="*{userLogin}">
+                </div>
+            </div>
+            <div class="col-auto">
+                <label for="password" class="form-label">Пароль</label>
+                <input name="userPassword" th:field="*{userPassword}" type="text" class="form-control" id="password">
+                <div
+                        class="alert alert-warning"
+                        th:if="${#fields.hasErrors('userPassword')}"
+                        th:errors="*{userPassword}">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-auto">
+                <label for="firstName" class="form-label">Имя</label>
+                <input name="userFirstName" th:field="*{userFirstName}" type="text" class="form-control" id="firstName">
+                <div
+                        class="alert alert-warning"
+                        th:if="${#fields.hasErrors('userFirstName')}"
+                        th:errors="*{userFirstName}">
+                </div>
+            </div>
+            <div class="col-auto">
+                <label for="lastName" class="form-label">Фамилия</label>
+                <input name="userLastName" th:field="*{userLastName}" type="text" class="form-control" id="lastName">
+                <div
+                        class="alert alert-warning"
+                        th:if="${#fields.hasErrors('userLastName')}"
+                        th:errors="*{userLastName}">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-auto">
+                <label for="middleName" class="form-label">Отчество</label>
+                <input name="userMiddleName" th:field="*{userMiddleName}" type="text" class="form-control"
+                       id="middleName">
+                <div
+                        class="alert alert-warning"
+                        th:if="${#fields.hasErrors('userMiddleName')}"
+                        th:errors="*{userMiddleName}">
+                </div>
+            </div>
+            <div class="col-auto">
+                <label for="backUpEmail" class="form-label">Бэкап-почта</label>
+                <input name="userBackUpEmail" th:field="*{userBackUpEmail}" type="text" class="form-control"
+                       id="backUpEmail">
+                <div
+                        class="alert alert-warning"
+                        th:if="${#fields.hasErrors('userBackUpEmail')}"
+                        th:errors="*{userBackUpEmail}">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-auto">
+                <label for="phone" class="form-label">Телефон</label>
+                <input name="userPhone" th:field="*{userPhone}" type="text" class="form-control" id="phone">
+                <div
+                        class="alert alert-warning"
+                        th:if="${#fields.hasErrors('userPhone')}"
+                        th:errors="*{userPhone}">
+                </div>
+            </div>
+            <div class="col-auto">
+                <label for="address" class="form-label">Адрес</label>
+                <input name="userAddress" th:field="*{userAddress}" type="text" class="form-control" id="address">
+                <div
+                        class="alert alert-warning"
+                        th:if="${#fields.hasErrors('userAddress')}"
+                        th:errors="*{userAddress}">
+                </div>
+            </div>
+        </div>
+        <div class="col-2">
+            <label for="birthDate" class="form-label">Дата Рождения</label>
+            <input name="userDateBirth" th:field="*{userDateBirth}" type="text" class="form-control" id="birthDate">
+            <div
+                    class="alert alert-warning"
+                    th:if="${#fields.hasErrors('userDateBirth')}"
+                    th:errors="*{userDateBirth}">
+            </div>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Добавить библиотекаря</button>
+        <button type="button" class="btn btn-secondary" onclick="window.history.back()">Назад</button>
+    </form>
+</div>
+</body>
+</html>

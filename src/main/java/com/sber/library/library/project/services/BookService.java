@@ -4,6 +4,7 @@ import com.sber.library.library.project.dto.*;
 import com.sber.library.library.project.exception.MyDeleteException;
 import com.sber.library.library.project.model.Author;
 import com.sber.library.library.project.model.Book;
+import com.sber.library.library.project.model.Publishing;
 import com.sber.library.library.project.repository.AuthorRepository;
 import com.sber.library.library.project.repository.BookRepository;
 import com.sber.library.library.project.repository.PublishingRepository;
@@ -120,14 +121,23 @@ public class BookService extends GenericService<Book, BookDTO> {
 
     @Override
     public void delete(Long objectId) throws MyDeleteException {
+        boolean flag = true;
         Book book = bookRepository.findById(objectId).orElseThrow(
                 () -> new NotFoundException("Such book with id " + objectId + " not found!"));
-        if (book.getPublish().size() == 0 && bookRepository.isBookReturned(objectId)) {
+        List<Publishing> publishing = publishingRepository.findPublishingsByBook_Id(objectId);
+        for (Publishing p : publishing) {
+            if (!p.isReturned()) {
+                flag = false; //если книга не возвращена, то false
+            }
+        }
+        if (book.getPublish().size() == 0 || flag) {
+            publishingRepository.deleteAll(publishing);
             bookRepository.delete(book);
         } else {
-            throw new MyDeleteException("Книга не может быть удалена, так как у нее есть активные аренды.");
+            throw new MyDeleteException("The book cannot be deleted because it has active leases.");
         }
     }
+
 
     @Override
     public Book getOne(Long objectId) {
@@ -153,3 +163,4 @@ public class BookService extends GenericService<Book, BookDTO> {
                 bookSearchDTO.getAuthorFIO());
     }
 }
+

@@ -8,7 +8,6 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -28,7 +27,6 @@ public class PublishingDTO extends CommonDTO {
     private Integer amount;
     private String bookTitleSearch;
     private boolean delayed;
-    private Integer period;
 
     public PublishingDTO(User user,
                          Book book,
@@ -41,7 +39,6 @@ public class PublishingDTO extends CommonDTO {
         this.returned = false;
         this.rentPeriod = period;
         this.returnDate = rentDate.plusMonths(Long.valueOf(rentPeriod));
-
     }
 
     public PublishingDTO(Publishing publish) {

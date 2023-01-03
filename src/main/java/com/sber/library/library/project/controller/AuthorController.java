@@ -1,7 +1,6 @@
 package com.sber.library.library.project.controller;
 
 import com.sber.library.library.project.dto.AuthorDTO;
-import com.sber.library.library.project.dto.BookAuthorDTO;
 import com.sber.library.library.project.dto.BookDTO;
 import com.sber.library.library.project.exception.MyDeleteException;
 import com.sber.library.library.project.model.Author;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/authors")
+@RequestMapping("/rest/authors")
 //CORS Filters
 @CrossOrigin(value = "*", allowedHeaders = "*")
 @Tag(name = "Авторы", description = "Контроллер для работы с авторами нашей библиотеки.")

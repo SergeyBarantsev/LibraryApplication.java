@@ -18,14 +18,24 @@
     <form method="POST" th:action="@{/users/registration}" th:object="${userForm}" style="margin: 0 auto">
         <div class="row">
             <div class="col-auto">
-                <label for="userLogin" class="form-label">Логин</label>
-                <input name="userLogin" type="text" class="form-control" id="userLogin" required>
+                <label for="login" class="form-label">Логин</label>
+                <input name="userLogin" th:field="*{userLogin}" type="text" class="form-control" id="login">
+                <div class="alert alert-warning"
+                     th:if="${#fields.hasErrors('userLogin')}"
+                     th:errors="*{userLogin}">
+                </div>
             </div>
             <div class="col-auto">
-                <label for="userPassword" class="form-label">Пароль</label>
-                <input name="userPassword" type="password" class="form-control" id="userPassword" required>
+                <label for="password" class="form-label">Пароль</label>
+                <input name="userPassword" th:field="*{userPassword}" type="password" class="form-control"
+                       id="password">
+                <div class="alert alert-warning"
+                     th:if="${#fields.hasErrors('userPassword')}"
+                     th:errors="*{userPassword}">
+                </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col-auto">
                 <label for="userFirstName" class="form-label">Имя</label>
@@ -39,7 +49,7 @@
         <div class="row">
             <div class="col-auto">
                 <label for="userMiddleName" class="form-label">Отчество</label>
-                <input name="userMiddleName" type="text" class="form-control" id="userMiddleName">
+                <input name="userMiddleName" type="text" class="form-control" id="userMiddleName" required>
             </div>
             <div class="col-auto">
                 <label for="userBackUpEmail" class="form-label">Бэкап-почта</label>

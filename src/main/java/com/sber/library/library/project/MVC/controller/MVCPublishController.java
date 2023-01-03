@@ -3,6 +3,7 @@ package com.sber.library.library.project.MVC.controller;
 import com.sber.library.library.project.dto.PublishingDTO;
 import com.sber.library.library.project.model.Book;
 import com.sber.library.library.project.model.User;
+import com.sber.library.library.project.repository.UserRepository;
 import com.sber.library.library.project.services.BookService;
 import com.sber.library.library.project.services.PublishingService;
 import lombok.extern.slf4j.Slf4j;
@@ -16,32 +17,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @Slf4j
 @RequestMapping("/publishing")
 public class MVCPublishController {
+    private final UserRepository userRepository;
     private final BookService bookService;
     private final PublishingService publishingService;
 
-    public MVCPublishController(BookService bookService, PublishingService publishingService) {
+    public MVCPublishController(BookService bookService, PublishingService publishingService,
+                                UserRepository userRepository) {
         this.bookService = bookService;
         this.publishingService = publishingService;
-    }
-
-    @GetMapping("/user-books/{id}")
-    public String userBooks(@RequestParam(value = "page", defaultValue = "1") int page,
-                            @RequestParam(value = "size", defaultValue = "10") int pageSize,
-                            @PathVariable Long id,
-                            Model model) {
-        PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.ASC, "book.title"));
-        Page<PublishingDTO> result = publishingService.getUserPublishing(id, pageRequest);
-        User user = result.getContent().get(0).getUser();
-        model.addAttribute("publish", result);
-        model.addAttribute("userId", id);
-        model.addAttribute("userFio", user.getUserLastName() + " " + user.getUserFirstName());
-        return "userBooks/viewAllUserBooks";
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/get-book/{id}")
@@ -62,6 +51,43 @@ public class MVCPublishController {
         log.debug("period: " + period);
         publishingService.rentABook(bookId, context.getAuthentication().getName(), (int) count, period);
         return "redirect:/books";
+    }
+
+    @PostMapping("/user-books/{id}/search")
+    public String searchPublish(@PathVariable Long id,
+                                @RequestParam(value = "page", defaultValue = "1") int page,
+                                @RequestParam(value = "size", defaultValue = "10") int pageSize,
+                                @ModelAttribute("publishSearchForm") PublishingDTO publishDTO,
+                                Model model) {
+        PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.ASC, "rentDate"));
+        Page<PublishingDTO> result = publishingService.searchPublish(publishDTO, pageRequest);
+        User user = userRepository.getReferenceById(id);
+        model.addAttribute("publish", result);
+        model.addAttribute("userId", id);
+        model.addAttribute("userFio", user.getUserLastName() + " " + user.getUserFirstName());
+        return "userBooks/viewAllUserBooks";
+    }
+
+
+    @GetMapping("/user-books/{id}")
+    public String userBooks(@RequestParam(value = "page", defaultValue = "1") int page,
+                            @RequestParam(value = "size", defaultValue = "10") int pageSize,
+                            @PathVariable Long id,
+                            Model model) {
+        PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.ASC, "book.title"));
+        Page<PublishingDTO> result = publishingService.getUserPublishing(id, pageRequest);
+        User user = userRepository.getReferenceById(id);
+        model.addAttribute("publish", result);
+        model.addAttribute("userId", id);
+        model.addAttribute("userFio", user.getUserLastName() + " " + user.getUserFirstName());
+        return "userBooks/viewAllUserBooks";
+    }
+
+
+    @GetMapping("/return-book/{id}")
+    public String returnBook(@PathVariable Long id) {
+        publishingService.returnBook(id);
+        return "redirect:/publishing/user-books/" + publishingService.getOne(id).getUser().getId();
     }
 }
 

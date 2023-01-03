@@ -6,6 +6,9 @@ import com.sber.library.library.project.model.Author;
 import com.sber.library.library.project.model.Book;
 import com.sber.library.library.project.repository.AuthorRepository;
 import com.sber.library.library.project.repository.BookRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
@@ -89,4 +92,8 @@ public class AuthorService extends GenericService<Author, AuthorDTO> {
         return bookDTOList;
     }
 
+    public Page<Author> getAllPaginated(PageRequest pageRequest) {
+        Page<Author> authors = authorRepository.findAll(pageRequest);
+        return new PageImpl<>(authors.getContent(), pageRequest, authors.getTotalElements());
+    }
 }

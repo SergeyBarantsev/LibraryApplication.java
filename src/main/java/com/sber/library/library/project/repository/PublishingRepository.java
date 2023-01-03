@@ -11,5 +11,8 @@ import java.util.List;
 public interface PublishingRepository extends JpaRepository<Publishing, Long> {
     List<Publishing> findBooksByUser(User user);
 
+    List<Publishing> findAllByBookTitleContainingIgnoreCase(String title);
+
+    List<Publishing> findPublishingsByBook_Id(Long id);
 
 }
